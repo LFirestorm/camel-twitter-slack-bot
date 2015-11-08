@@ -16,26 +16,24 @@ public class MySpringBootRouter extends FatJarRouter {
 	 @Bean(name = "slack")
 	  public SlackComponent getSomeClass() {
 	      SlackComponent sc = new SlackComponent();
+	      //set hook url
+	      sc.setWebhookUrl("");
 	      return sc;
 	  }
 
     @Override
-    public void configure() {
-        /*from("timer://trigger").
-                transform().simple("ref:myBean").
-                to("slack:#random", "log:out", "mock:test");*/
-    	
+    public void configure() {    	
     	TwitterComponent tc = getContext().getComponent("twitter", TwitterComponent.class);
-    	    	
+    	//set credentials
+    	tc.setAccessToken("");
+    	tc.setAccessTokenSecret("");
+    	tc.setConsumerKey("");
+    	tc.setConsumerSecret("");
+    	
     	
     	from("twitter://streaming/filter?type=EVENT&delay=2&keywords=#openfest15")
     		.streamCaching()
     		.to("slack:#random","log:out");
-    }
-
-    @Bean
-    String myBean() {
-        return "I'm Spring bean!";
     }
 
 }
